@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flores Amarillas para Ti</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="ambient" aria-hidden="true">
+        <span class="sparkle s1"></span>
+        <span class="sparkle s2"></span>
+        <span class="sparkle s3"></span>
+        <span class="sparkle s4"></span>
+        <span class="sparkle s5"></span>
+    </div>
+    <main class="card">
+        <section class="panel panel-intro active" data-step="intro" aria-hidden="false">
+            <h1>&iexcl;Feliz d&iacute;a, ser de luz!</h1>
+            <p>Quise regalarte un pedacito del sol en forma de flores amarillas. Cierra los ojos, respira, siente la brisa y prep&aacute;rate para abrir tu regalo especial. Cada p&eacute;talo lleva un "te quiero" con tu nombre.</p>
+            <button class="btn next-step" type="button" data-target="bouquet">Siguiente ✨</button>
+        </section>
+
+        <section class="panel panel-bouquet" data-step="bouquet" aria-hidden="true">
+            <div class="story">
+                <h2>Un ramo dorado para ti</h2>
+                <p>Este ramo de flores espero que sea de tu agrado , cada flores es un reecuerdo de lo brillante que eres y el osito a su lado esta listo para recodarte el aprecio que te tengo.</p>
+                <footer>Hecho con paciencia, amor y luz amarilla.</footer>
+            </div>
+            <div class="gift-column">
+                <div class="bouquet-figure" aria-hidden="true">
+                    <div class="bouquet-light"></div>
+                    <div class="stem-row">
+                        <div class="stem-flower" style="--lean:-12deg; --delay:0s; --lift:-2%;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:-7deg; --delay:0.2s; --lift:-1%;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:-3deg; --delay:0.35s;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:0deg; --delay:0.5s; --lift:2%;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:3deg; --delay:0.35s;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:7deg; --delay:0.2s; --lift:-1%;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:12deg; --delay:0s; --lift:-2%;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                    </div>
+                    <div class="leaf-collar">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="wrap-top">
+                        <span class="wrap-panel left"></span>
+                        <span class="wrap-panel right"></span>
+                    </div>
+                    <div class="wrap-body"></div>
+                    <div class="wrap-tail"></div>
+                    <div class="ribbon">
+                        <span class="bow left"></span>
+                        <span class="knot"></span>
+                        <span class="bow right"></span>
+                    </div>
+                    <div class="floor-glow"></div>
+                </div>
+                <div class="teddy-wrap">
+                    <div class="bubble" id="loveBubble" role="status" aria-live="polite">TQM (te quiero mucho).</div>
+                    <button class="teddy" id="teddy" type="button" aria-pressed="false" aria-describedby="loveBubble">
+                        <div class="teddy-body">
+                            <div class="ear left"></div>
+                            <div class="ear right"></div>
+                            <div class="face">
+                                <div class="eyes">
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="nose"></div>
+                            </div>
+                            <div class="paws">
+                                <div class="paw"></div>
+                                <div class="paw"></div>
+                            </div>
+                        </div>
+                    </button>
+                    <span class="teddy-hint">Toca al osito para escuchar mi "te quiero".</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
