@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flores Amarillas para Ti</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            color-scheme: light;
+            --sky: #fff4d4;
+            --sunset: #ffdba3;
+            --glow: rgba(254, 220, 116, 0.6);
+            --card: rgba(255, 255, 255, 0.9);
+            --text: #584022;
+            --accent: #f2a135;
+            --accent-strong: #ee8428;
+            --leaf: #3f935f;
+            --leaf-soft: #77c991;
+            --stem: #3a8a54;
+            --bud: #ffd770;
+            --bud-soft: #ffe791;
+            --bud-highlight: #fff6d8;
+            --bud-center: #d88627;
+            --wrap: #f8dfb7;
+            --wrap-shadow: #d3b18b;
+            --wrap-outline: rgba(214, 169, 110, 0.55);
+            --ribbon: #f06f37;
+            --ribbon-light: #fcb45e;
+            font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top left, var(--sunset), var(--sky) 45%, #ffe8a6 100%);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            width: 60vmin;
+            height: 60vmin;
+            border-radius: 50%;
+            background: var(--glow);
+            filter: blur(60px);
+            opacity: 0.7;
+            animation: floatGlow 12s ease-in-out infinite;
+            z-index: -2;
+        }
+
+        body::before {
+            top: -12vmin;
+            left: -15vmin;
+        }
+
+        body::after {
+            bottom: -16vmin;
+            right: -18vmin;
+            animation-delay: 3s;
+        }
+
+        .ambient {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 0.45rem;
+            height: 0.45rem;
+            background: radial-gradient(circle, #fff 0%, rgba(255, 255, 255, 0) 70%);
+            animation: twinkle 6s linear infinite;
+            opacity: 0.8;
+        }
+
+        .sparkle::after {
+            content: "";
+            position: absolute;
+            inset: -0.4rem;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.45), transparent 70%);
+            border-radius: 50%;
+        }
+
+        .sparkle.s1 { top: 15%; left: 18%; animation-delay: 0.4s; }
+        .sparkle.s2 { top: 28%; right: 12%; animation-delay: 1.2s; }
+        .sparkle.s3 { top: 62%; left: 8%; animation-delay: 2.4s; }
+        .sparkle.s4 { bottom: 20%; right: 22%; animation-delay: 3.4s; }
+        .sparkle.s5 { bottom: 35%; left: 35%; animation-delay: 4.8s; }
+
+        main.card {
+            position: relative;
+            width: min(920px, 94vw);
+            padding: clamp(2.6rem, 5vw, 3.6rem);
+            border-radius: 30px;
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 32px 62px rgba(235, 166, 64, 0.28);
+            display: grid;
+            gap: clamp(2rem, 4vw, 2.6rem);
+        }
+
+        .panel {
+            display: grid;
+            gap: 1.6rem;
+            justify-items: center;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(40px) scale(0.97);
+            transition: opacity 500ms ease, transform 500ms ease;
+            pointer-events: none;
+        }
+
+        .panel.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .panel h1,
+        .panel h2 {
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .panel h1 {
+            font-size: clamp(2.8rem, 5vw, 4.6rem);
+            color: var(--accent-strong);
+            text-shadow: 0 12px 30px rgba(232, 148, 48, 0.35);
+        }
+
+        .panel h2 {
+            font-size: clamp(2.3rem, 4vw, 3.5rem);
+            color: #e0832f;
+        }
+
+        .panel p {
+            max-width: 60ch;
+            font-size: clamp(1.15rem, 2vw, 1.35rem);
+            line-height: 1.7;
+            margin: 0;
+            text-wrap: balance;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 0.95rem 2.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #fbd361, #f9a33c);
+            color: #744016;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 18px 35px rgba(241, 162, 52, 0.35);
+            transition: transform 200ms ease, box-shadow 200ms ease;
+        }
+
+        .btn::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.6), transparent 55%);
+            opacity: 0;
+            transition: opacity 200ms ease;
+        }
+
+        .btn:hover,
+        .btn:focus-visible {
+            transform: translateY(-3px);
+            box-shadow: 0 24px 40px rgba(241, 162, 52, 0.4);
+        }
+
+        .btn:hover::after,
+        .btn:focus-visible::after {
+            opacity: 1;
+        }
+
+        .panel-bouquet {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            align-items: center;
+            gap: clamp(2.2rem, 6vw, 3.6rem);
+        }
+
+        .panel-bouquet .story {
+            max-width: 34rem;
+            justify-self: center;
+        }
+
+        .panel-bouquet .story footer {
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+            opacity: 0.7;
+        }
+
+        .gift-column {
+            display: grid;
+            gap: clamp(1.4rem, 3vw, 2rem);
+            justify-items: center;
+        }
+
+        .bouquet-figure {
+            position: relative;
+            width: clamp(320px, 34vw + 140px, 520px);
+            height: clamp(440px, 40vw + 140px, 600px);
+        }
+
+        .bouquet-light {
+            position: absolute;
+            inset: 6% 8% 28% 8%;
+            border-radius: 48% 48% 55% 55%;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 245, 214, 0.9), rgba(255, 210, 112, 0));
+            filter: blur(12px);
+            opacity: 0.85;
+            z-index: 1;
+        }
+
+        .stem-row {
+            position: absolute;
+            top: 27%;
+            left: 50%;
+            transform: translate(-50%, 6%);
+            width: 70%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 clamp(0.6rem, 1.4vw, 1.1rem);
+            z-index: 6;
+        }
+
+        .stem-flower {
+            position: relative;
+            width: clamp(3rem, 4.8vw, 3.8rem);
+            height: clamp(10.5rem, 16vw, 13.5rem);
+            transform-origin: bottom center;
+            animation: swayStem 6.2s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        .stem-flower .stem {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: clamp(0.45rem, 0.9vw, 0.75rem);
+            height: 72%;
+            background: linear-gradient(180deg, #9de2a9 0%, var(--stem) 80%);
+            border-radius: 999px;
+            box-shadow: inset 0 -8px 14px rgba(0, 0, 0, 0.22);
+        }
+
+        .stem-flower .stem::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.55), transparent 70%);
+            opacity: 0.7;
+        }
+
+        .stem-flower .bud {
+            position: absolute;
+            bottom: calc(72% - 0.2rem + var(--lift, 0%));
+            left: 50%;
+            width: clamp(3.4rem, 5.2vw, 4.2rem);
+            height: clamp(3.4rem, 5.2vw, 4.2rem);
+            transform: translateX(-50%);
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 28%, var(--bud-highlight) 12%, var(--bud-soft) 55%, var(--bud) 85%, #f0a435 100%);
+            box-shadow: 0 18px 26px rgba(240, 160, 52, 0.28);
+            animation: budPulse 4.8s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        .stem-flower .bud::after {
+            content: "";
+            position: absolute;
+            inset: 30% 32% 42% 28%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+            opacity: 0.85;
+        }
+
+        .stem-flower .leaf {
+            position: absolute;
+            bottom: 36%;
+            width: clamp(2.1rem, 3.4vw, 2.8rem);
+            height: clamp(1.3rem, 2.4vw, 1.8rem);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), var(--leaf-soft) 55%, var(--leaf) 100%);
+            border-radius: 60% 40% 60% 40%;
+            box-shadow: 0 8px 12px rgba(57, 133, 74, 0.22);
+        }
+
+        .stem-flower .leaf.left {
+            left: -105%;
+            transform: rotate(-26deg);
+        }
+
+        .stem-flower .leaf.right {
+            right: -105%;
+            transform: scaleX(-1) rotate(-26deg);
+        }
+
+        .leaf-collar {
+            position: absolute;
+            top: 57%;
+            left: 50%;
+            transform: translate(-50%, -10%);
+            width: 88%;
+            display: flex;
+            justify-content: center;
+            gap: clamp(1rem, 2vw, 1.6rem);
+            z-index: 4;
+        }
+
+        .leaf-collar span {
+            flex: 1;
+            max-width: clamp(4rem, 7vw, 5.2rem);
+            height: clamp(2rem, 3.4vw, 2.5rem);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.45), rgba(63, 147, 95, 0.92) 55%, rgba(30, 95, 60, 0.85));
+            border-radius: 60% 60% 26% 26%;
+            transform: rotate(calc(var(--angle) * 1deg));
+            box-shadow: 0 12px 18px rgba(57, 133, 74, 0.26);
+        }
+
+        .leaf-collar span:nth-child(1) { --angle: -26; }
+        .leaf-collar span:nth-child(2) { --angle: -13; }
+        .leaf-collar span:nth-child(3) { --angle: 0; }
+        .leaf-collar span:nth-child(4) { --angle: 13; }
+        .leaf-collar span:nth-child(5) { --angle: 26; }
+
+        .wrap-top {
+            position: absolute;
+            bottom: 34%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 86%;
+            height: 32%;
+            background: radial-gradient(circle at 50% 12%, #fff3de 8%, var(--wrap) 62%, var(--wrap-shadow) 100%);
+            border-radius: 60% 60% 38% 38% / 80% 80% 42% 42%;
+            box-shadow: 0 26px 36px rgba(180, 117, 34, 0.28);
+            overflow: hidden;
+            z-index: 3;
+        }
+
+        .wrap-top::after {
+            content: "";
+            position: absolute;
+            inset: 15% 18% 18%;
+            border-radius: inherit;
+            border: 2px solid rgba(255, 236, 197, 0.45);
+            opacity: 0.65;
+        }
+
+        .wrap-panel {
+            position: absolute;
+            top: 26%;
+            width: 32%;
+            height: 72%;
+            background: linear-gradient(135deg, rgba(255, 230, 196, 0.85), rgba(205, 165, 120, 0.65));
+            clip-path: polygon(0 0, 100% 18%, 74% 100%, 0 86%);
+            opacity: 0.9;
+        }
+
+        .wrap-panel.left { left: 6%; transform: rotate(-7deg); }
+        .wrap-panel.right { right: 6%; transform: scaleX(-1) rotate(-7deg); }
+
+        .wrap-body {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 48%;
+            height: 28%;
+            background: linear-gradient(180deg, #fbe8ce 0%, var(--wrap) 50%, var(--wrap-shadow) 100%);
+            border-radius: 40% 40% 38% 38% / 55% 55% 45% 45%;
+            box-shadow: 0 20px 28px rgba(168, 110, 32, 0.25);
+            overflow: hidden;
+            z-index: 3;
+        }
+
+        .wrap-body::after {
+            content: "";
+            position: absolute;
+            inset: 16% 22% 18%;
+            border-radius: inherit;
+            border: 2px solid var(--wrap-outline);
+            opacity: 0.6;
+        }
+
+        .wrap-tail {
+            position: absolute;
+            bottom: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 26%;
+            height: 26%;
+            background: linear-gradient(180deg, rgba(255, 240, 216, 0.95), rgba(210, 170, 130, 0.85));
+            clip-path: polygon(46% 0, 54% 0, 100% 90%, 0 90%);
+            filter: drop-shadow(0 18px 20px rgba(160, 110, 38, 0.28));
+            z-index: 2;
+        }
+
+        .ribbon {
+            position: absolute;
+            bottom: 24%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 58%;
+            height: 20%;
+            background: linear-gradient(135deg, var(--ribbon-light), var(--ribbon));
+            border-radius: 999px;
+            box-shadow: 0 15px 26px rgba(240, 114, 56, 0.28);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10%;
+            z-index: 4;
+        }
+
+        .ribbon .knot {
+            width: clamp(2rem, 4vw, 2.6rem);
+            height: clamp(1.2rem, 2.4vw, 1.6rem);
+            border-radius: 45% 45% 50% 50%;
+            background: linear-gradient(180deg, #fdd29a, #f18a45);
+            box-shadow: inset 0 -6px 10px rgba(0, 0, 0, 0.18);
+        }
+
+        .ribbon .bow {
+            width: clamp(3rem, 5.4vw, 3.8rem);
+            height: clamp(1.6rem, 3vw, 2rem);
+            background: linear-gradient(135deg, rgba(255, 182, 112, 0.92), rgba(240, 114, 56, 0.82));
+            clip-path: polygon(0 0, 100% 10%, 80% 100%, 0 78%);
+            filter: blur(0.3px);
+        }
+
+        .ribbon .bow.right {
+            transform: scaleX(-1);
+        }
+
+        .floor-glow {
+            position: absolute;
+            bottom: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 82%;
+            height: 14%;
+            background: radial-gradient(circle, rgba(240, 180, 60, 0.55), transparent 65%);
+            filter: blur(10px);
+            z-index: 1;
+        }
+
+        .bubble {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 24px;
+            padding: 0.65rem 1.5rem;
+            font-weight: 600;
+            color: var(--accent-strong);
+            box-shadow: 0 16px 32px rgba(233, 152, 50, 0.25);
+            transform: translateY(10px);
+            opacity: 0;
+            transition: opacity 220ms ease, transform 220ms ease;
+        }
+
+        .bubble.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .teddy-wrap {
+            display: grid;
+            gap: 0.85rem;
+            justify-items: center;
+        }
+
+        .teddy {
+            position: relative;
+            width: clamp(160px, 18vw, 210px);
+            height: clamp(180px, 23vw, 250px);
+            border: none;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .teddy:focus-visible .teddy-body {
+            box-shadow: 0 0 0 7px rgba(240, 147, 43, 0.4);
+        }
+
+        .teddy-body {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, #d59357 0%, #bb6a35 80%);
+            border-radius: 45% 45% 40% 40% / 52% 52% 55% 55%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 32%;
+            transition: transform 280ms ease;
+            animation: floaty 5.8s ease-in-out infinite;
+        }
+
+        .teddy:hover .teddy-body {
+            transform: translateY(-6px) scale(1.02);
+        }
+
+        .ear {
+            position: absolute;
+            width: 40%;
+            height: 42%;
+            top: -8%;
+            background: linear-gradient(180deg, #dba572 0%, #ba6a34 90%);
+            border-radius: 50%;
+        }
+
+        .ear::after {
+            content: "";
+            position: absolute;
+            inset: 24%;
+            border-radius: 50%;
+            background: #f4c4a3;
+        }
+
+        .ear.left { left: -4%; }
+        .ear.right { right: -4%; }
+
+        .face {
+            width: 62%;
+            height: 58%;
+            background: #f6d0b2;
+            border-radius: 50% 50% 45% 45%;
+            display: grid;
+            place-items: center;
+            gap: 0.5rem;
+            box-shadow: inset 0 -0.5rem 1rem rgba(0, 0, 0, 0.2);
+        }
+
+        .eyes {
+            display: flex;
+            gap: 0.95rem;
+        }
+
+        .eyes span {
+            width: 0.55rem;
+            height: 1rem;
+            background: #3a2415;
+            border-radius: 45%;
+        }
+
+        .nose {
+            width: 1.1rem;
+            height: 0.85rem;
+            background: #3a2415;
+            border-radius: 60% 60% 50% 50%;
+            position: relative;
+        }
+
+        .nose::after {
+            content: "";
+            position: absolute;
+            width: 1.2rem;
+            height: 0.55rem;
+            border: 0.16rem solid #3a2415;
+            border-top: none;
+            border-radius: 0 0 50% 50%;
+            left: 50%;
+            top: 0.5rem;
+            transform: translateX(-50%);
+        }
+
+        .paws {
+            position: absolute;
+            bottom: -12%;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .paw {
+            width: 42%;
+            height: 36%;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #de9c63 0%, #bf6a36 100%);
+            box-shadow: inset 0 -0.3rem 0.8rem rgba(0, 0, 0, 0.25);
+            position: relative;
+        }
+
+        .paw::after {
+            content: "";
+            position: absolute;
+            inset: 25%;
+            border-radius: 50%;
+            background: #f6d0b2;
+        }
+
+        .teddy-hint {
+            font-size: 0.92rem;
+            opacity: 0.7;
+        }
+
+        footer {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+
+        @keyframes floatGlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { transform: scale(0.85); opacity: 0.5; }
+            25% { transform: scale(1.2); opacity: 0.9; }
+            50% { transform: scale(0.95); opacity: 0.7; }
+            75% { transform: scale(1.3); opacity: 1; }
+        }
+
+        @keyframes swayStem {
+            0%, 100% { transform: rotate(calc(var(--lean, 0deg) - 3deg)); }
+            50% { transform: rotate(calc(var(--lean, 0deg) + 3deg)); }
+        }
+
+        @keyframes budPulse {
+            0%, 100% {
+                transform: translateX(-50%) scale(0.97);
+                box-shadow: 0 16px 22px rgba(240, 150, 40, 0.22);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.05);
+                box-shadow: 0 22px 32px rgba(240, 170, 60, 0.34);
+            }
+        }
+
+        @keyframes floaty {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @media (max-width: 720px) {
+            .panel-bouquet {
+                grid-template-columns: 1fr;
+            }
+
+            .panel-bouquet .story {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient" aria-hidden="true">
+        <span class="sparkle s1"></span>
+        <span class="sparkle s2"></span>
+        <span class="sparkle s3"></span>
+        <span class="sparkle s4"></span>
+        <span class="sparkle s5"></span>
+    </div>
+    <main class="card">
+        <section class="panel panel-intro active" data-step="intro" aria-hidden="false">
+            <h1>&iexcl;Feliz d&iacute;a, ser de luz!</h1>
+            <p>Quise regalarte un pedacito del sol en forma de flores amarillas. Cierra los ojos, respira, siente la brisa y prep&aacute;rate para abrir tu regalo especial. Cada p&eacute;talo lleva un "te quiero" con tu nombre.</p>
+            <button class="btn next-step" type="button" data-target="bouquet">Siguiente ✨</button>
+        </section>
+
+        <section class="panel panel-bouquet" data-step="bouquet" aria-hidden="true">
+            <div class="story">
+                <h2>Un ramo dorado para ti</h2>
+                <p>Este ramo de flores espero que sea de tu agrado , cada flores es un reecuerdo de lo brillante que eres y el osito a su lado esta listo para recodarte el aprecio que te tengo.</p>
+                <footer>Hecho con paciencia, amor y luz amarilla.</footer>
+            </div>
+            <div class="gift-column">
+                <div class="bouquet-figure" aria-hidden="true">
+                    <div class="bouquet-light"></div>
+                    <div class="stem-row">
+                        <div class="stem-flower" style="--lean:-12deg; --delay:0s; --lift:-2%;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:-7deg; --delay:0.2s; --lift:-1%;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:-3deg; --delay:0.35s;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:0deg; --delay:0.5s; --lift:2%;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:3deg; --delay:0.35s;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:7deg; --delay:0.2s; --lift:-1%;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                        <div class="stem-flower" style="--lean:12deg; --delay:0s; --lift:-2%;">
+                            <span class="bud"></span>
+                            <span class="stem"></span>
+                            <span class="leaf left"></span>
+                            <span class="leaf right"></span>
+                        </div>
+                    </div>
+                    <div class="leaf-collar">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="wrap-top">
+                        <span class="wrap-panel left"></span>
+                        <span class="wrap-panel right"></span>
+                    </div>
+                    <div class="wrap-body"></div>
+                    <div class="wrap-tail"></div>
+                    <div class="ribbon">
+                        <span class="bow left"></span>
+                        <span class="knot"></span>
+                        <span class="bow right"></span>
+                    </div>
+                    <div class="floor-glow"></div>
+                </div>
+                <div class="teddy-wrap">
+                    <div class="bubble" id="loveBubble" role="status" aria-live="polite">TQM (te quiero mucho).</div>
+                    <button class="teddy" id="teddy" type="button" aria-pressed="false" aria-describedby="loveBubble">
+                        <div class="teddy-body">
+                            <div class="ear left"></div>
+                            <div class="ear right"></div>
+                            <div class="face">
+                                <div class="eyes">
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="nose"></div>
+                            </div>
+                            <div class="paws">
+                                <div class="paw"></div>
+                                <div class="paw"></div>
+                            </div>
+                        </div>
+                    </button>
+                    <span class="teddy-hint">Toca al osito para escuchar mi "te quiero".</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const panels = Array.from(document.querySelectorAll('.panel'));
+        const nextButtons = document.querySelectorAll('[data-target]');
+        const teddyButton = document.getElementById('teddy');
+        const bubble = document.getElementById('loveBubble');
+        let audioContext;
+
+        function showPanel(step) {
+            panels.forEach((panel) => {
+                const isActive = panel.dataset.step === step;
+                panel.classList.toggle('active', isActive);
+                panel.setAttribute('aria-hidden', String(!isActive));
+            });
+        }
+
+        nextButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const target = btn.getAttribute('data-target');
+                showPanel(target);
+            });
+        });
+
+        function playChime() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            const now = audioContext.currentTime;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(660, now);
+            osc.frequency.exponentialRampToValueAtTime(880, now + 0.35);
+
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.exponentialRampToValueAtTime(0.25, now + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+
+            osc.connect(gain).connect(audioContext.destination);
+            osc.start(now);
+            osc.stop(now + 1.05);
+        }
+
+        function toggleLove() {
+            const isVisible = bubble.classList.toggle('visible');
+            teddyButton.setAttribute('aria-pressed', String(isVisible));
+            playChime();
+        }
+
+        teddyButton.addEventListener('click', toggleLove);
+        teddyButton.addEventListener('keydown', (event) => {
+            if (event.code === 'Enter' || event.code === 'Space') {
+                event.preventDefault();
+                toggleLove();
+            }
+        });
+    </script>
+</body>
+</html>
